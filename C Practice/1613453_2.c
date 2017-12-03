@@ -8,12 +8,66 @@ Description: A Programm allow two players to play the game of tic-tac-toe*/
 #include <stdlib.h>                   /* include information about standard library stdlib.h*/
 #include <string.h>                   /* include information about standard library string.h*/
 #include <time.h>                     /* include information about standard library time.h*/
- 
+#include <windows.h>			      /*include the library 'windows.h'*/
+
 int winner(char board[11][11]);       /* Define a main function named winner which could judge who is winner*/
 int display_board(char board[11][11]);/* Define a main function named winner which could display the board*/
 
+void game();
 int main()                            /* Define a main function named main*/
 {	
+	game();
+}
+
+int winner(char board[11][11]) /* Placeholder for winner() function */
+{
+	int winner_number = 0; /*Returned to main function later*/
+	int blank = 0; /* Used to tell if the game is over or there's a tie*/
+	int i = 0; /* Initialize loop-counter (used to go through board to detect blank spaces)*/
+	int j = 0; /* Initialize loop-counter (used to go through board to detect blank spaces)*/
+	if (((board[1][1] == 'X') && (board[1][5] == 'X') && (board[1][9] == 'X')) || /* first row*/
+		((board[1][1] == 'X') && (board[5][1] == 'X') && (board[9][1] == 'X')) || /* first column*/
+		((board[1][1] == 'X') && (board[5][5] == 'X') && (board[9][9] == 'X')) || /* diagonal 1*/
+		((board[5][1] == 'X') && (board[5][5] == 'X') && (board[5][9] == 'X')) || /* second row*/
+		((board[9][1] == 'X') && (board[9][5] == 'X') && (board[9][9] == 'X')) || /* third row*/
+		((board[1][5] == 'X') && (board[5][5] == 'X') && (board[9][5] == 'X')) || /* second column*/
+		((board[1][9] == 'X') && (board[5][9] == 'X') && (board[9][9] == 'X')) || /* third column*/
+		((board[1][9] == 'X') && (board[5][5] == 'X') && (board[9][1] == 'X')) /* diagonal 2*/
+		)
+	{
+		winner_number = 1;
+	} 
+	else if (((board[1][1] == 'O') && (board[1][5] == 'O') && (board[1][9] == 'O')) || /* first row*/
+			   ((board[1][1] == 'O') && (board[5][1] == 'O') && (board[9][1] == 'O')) || /* first column*/
+			   ((board[1][1] == 'O') && (board[5][5] == 'O') && (board[9][9] == 'O')) || /* diagonal 1*/
+			   ((board[5][1] == 'O') && (board[5][5] == 'O') && (board[5][9] == 'O')) || /* second row*/
+			   ((board[9][1] == 'O') && (board[5][9] == 'O') && (board[9][9] == 'O')) || /* third row*/
+			   ((board[1][5] == 'O') && (board[5][5] == 'O') && (board[9][5] == 'O')) || /* second column*/
+			   ((board[1][9] == 'O') && (board[5][9] == 'O') && (board[9][9] == 'O')) || /* third column*/
+			   ((board[1][9] == 'O') && (board[5][5] == 'O') && (board[9][1] == 'O')) /* diagonal 2*/
+			   )
+	{
+		winner_number = 2;
+	} 
+	else 
+			 {
+					for (i = 1; i < 10; i=i+4) /* Go through each row*/
+					{
+						for (j = 1; j < 10; j=j+4) /* Go through each column*/
+						{
+							if (board[i][j] <= '9'&&board[i][j]>='1') {
+								blank = 1; /* 1 means there's still a blank*/
+							}
+						}
+					}
+					if (blank == 0) { /* It will still be 0 if no blanks were found*/
+						winner_number = 3;
+					}
+				}
+	return winner_number;
+}
+void game()
+{
 	int a;			/* Initialize variable which is used to return the value of scanf*/
 	int number = 0; /* Initialize variable which is used to collect number*/
 	int player = 1; /* Represent players as numbers*/
@@ -36,11 +90,13 @@ int main()                            /* Define a main function named main*/
 	{' ',' ',' ','#',' ',' ',' ','#',' ',' ',' '} ,
 	};     /* Initialize the board*/
 
-	printf("\n Here is a blank Tic-Tac-Toe board for you and a friend to play Tic-Tac-Toe on: \n");
-	printf("let us choose who play first by random\n");
-	srand(time(0));
-	player=rand()%(2)+1;/*choose who play first by random*/
-	printf("%d play first",player);
+	printf("\n Here is a blank Tic-Tac-Toe board for you To play with computer: \n");
+	printf("let us choose who play first 1.You       2.Computer\n");
+	scanf("%d",&player);
+	if(player==1)
+		printf("You play first\n");
+	else if(player==2)
+		printf("The computer play first\n");
 	display_board(board); /* Show initial position of board */
 	while (win == 0) /* Continue the game until a player wins*/
 		{
@@ -109,9 +165,9 @@ int main()                            /* Define a main function named main*/
 				}
 				  number = 0; /* Reset*/
 			}
-			
+			system("cls");
 			printf("\n The board now looks like this: \n");
-			display_board(board); /* Update board*/
+			display_board(board); /* Update board*/		
 			win = winner(board); // Check for winner
 			if (win == 1) { /* Function winner() should return 1 if player 1 wins*/
 				printf("\n Player 1 wins! \n");
@@ -153,52 +209,4 @@ int display_board(char board[11][11])/*Placeholder for display_board() functio*/
 	printf(" \n "); /* just some extra whitespace for no reason*/
 	return 0;
 	
-}
-
-int winner(char board[11][11]) /* Placeholder for winner() function */
-{
-	int winner_number = 0; /*Returned to main function later*/
-	int blank = 0; /* Used to tell if the game is over or there's a tie*/
-	int i = 0; /* Initialize loop-counter (used to go through board to detect blank spaces)*/
-	int j = 0; /* Initialize loop-counter (used to go through board to detect blank spaces)*/
-	if (((board[1][1] == 'X') && (board[1][5] == 'X') && (board[1][9] == 'X')) || /* first row*/
-		((board[1][1] == 'X') && (board[5][1] == 'X') && (board[9][1] == 'X')) || /* first column*/
-		((board[1][1] == 'X') && (board[5][5] == 'X') && (board[9][9] == 'X')) || /* diagonal 1*/
-		((board[5][1] == 'X') && (board[5][5] == 'X') && (board[5][9] == 'X')) || /* second row*/
-		((board[9][1] == 'X') && (board[9][5] == 'X') && (board[9][9] == 'X')) || /* third row*/
-		((board[1][5] == 'X') && (board[5][5] == 'X') && (board[9][5] == 'X')) || /* second column*/
-		((board[1][9] == 'X') && (board[5][9] == 'X') && (board[9][9] == 'X')) || /* third column*/
-		((board[1][9] == 'X') && (board[5][5] == 'X') && (board[9][1] == 'X')) /* diagonal 2*/
-		)
-	{
-		winner_number = 1;
-	} 
-	else if (((board[1][1] == 'O') && (board[1][5] == 'O') && (board[1][9] == 'O')) || /* first row*/
-			   ((board[1][1] == 'O') && (board[5][1] == 'O') && (board[9][1] == 'O')) || /* first column*/
-			   ((board[1][1] == 'O') && (board[5][5] == 'O') && (board[9][9] == 'O')) || /* diagonal 1*/
-			   ((board[5][1] == 'O') && (board[5][5] == 'O') && (board[5][9] == 'O')) || /* second row*/
-			   ((board[9][1] == 'O') && (board[5][9] == 'O') && (board[9][9] == 'O')) || /* third row*/
-			   ((board[1][5] == 'O') && (board[5][5] == 'O') && (board[9][5] == 'O')) || /* second column*/
-			   ((board[1][9] == 'O') && (board[5][9] == 'O') && (board[9][9] == 'O')) || /* third column*/
-			   ((board[1][9] == 'O') && (board[5][5] == 'O') && (board[9][1] == 'O')) /* diagonal 2*/
-			   )
-	{
-		winner_number = 2;
-	} 
-	else 
-			 {
-					for (i = 1; i < 10; i=i+4) /* Go through each row*/
-					{
-						for (j = 1; j < 10; j=j+4) /* Go through each column*/
-						{
-							if (board[i][j] <= '9'&&board[i][j]>='1') {
-								blank = 1; /* 1 means there's still a blank*/
-							}
-						}
-					}
-					if (blank == 0) { /* It will still be 0 if no blanks were found*/
-						winner_number = 3;
-					}
-				}
-	return winner_number;
 }
